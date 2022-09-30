@@ -167,12 +167,12 @@
 
                                             <tbody>
 
-                                            <tr th:each="eachUser: ${users}">
-                                                <td th:text="${eachUser.firstName+' '+ eachUser.lastName}"></td>
-                                                <td th:text="${eachUser.userName}"></td>
-                                                <td th:text="${eachUser.gender}"></td>
-                                                <td th:text="${eachUser.phone}"></td>
-                                                <td th:text="${eachUser.role.getDescription()}"></td>
+                                            <tr th:each="user: ${users}">
+                                                <td th:text="${user.firstName+' '+ user.lastName}"></td>
+                                                <td th:text="${user.userName}"></td>
+                                                <td th:text="${user.gender.getVal()}"></td>
+                                                <td th:text="${user.phone}"></td>
+                                                <td th:text="${user.role.description}"></td>
                                                 <td class="actions">
                                                     <a href="#">
                                                         <button type="button" class="btn btn-warning btn-sm">Update
