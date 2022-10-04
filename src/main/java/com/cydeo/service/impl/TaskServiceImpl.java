@@ -47,6 +47,9 @@ public class TaskServiceImpl extends AbstractMapService<TaskDTO, Long> implement
         if(object.getTaskStatus()==null){
             object.setTaskStatus(findById(object.getId()).getTaskStatus());
         }
+        if (object.getAssignedDate() == null) {
+            object.setAssignedDate(findById(object.getId()).getAssignedDate());
+        }
         super.update(object.getId(), object);
     }
 }
