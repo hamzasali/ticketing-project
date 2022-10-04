@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/project")
 public class ProjectController {
@@ -53,21 +55,33 @@ public class ProjectController {
     }
 
     @GetMapping("/update/{projectCode}")
-    public String editProject(@PathVariable("projectCode") String projectCode, Model model){
+    public String editProject(@PathVariable("projectCode") String projectCode, Model model) {
 
-        model.addAttribute("project",projectService.findById(projectCode));
+        model.addAttribute("project", projectService.findById(projectCode));
         model.addAttribute("managers", userService.findManagers());
-        model.addAttribute("projects",projectService.findAll());
+        model.addAttribute("projects", projectService.findAll());
 
         return "/project/update";
     }
 
     @PostMapping("/update")
-    public String updateProject(@ModelAttribute("project") ProjectDTO project){
+    public String updateProject(@ModelAttribute("project") ProjectDTO project) {
 
         projectService.update(project);
 
         return "redirect:/project/create";
+    }
+
+    @GetMapping("/manager/project-status")
+    public String getProjectByManager(Model model) {
+        UserDTO manager = userService.findById("john@cydeo.com");
+
+        List<ProjectDTO> projects = projectService.getCountedListOfProjectDTO(manager);
+
+
+        model.addAttribute("projects", projects);
+
+        return "/manager/project-status";
     }
 
 }
