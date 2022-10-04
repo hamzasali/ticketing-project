@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("task")
+@RequestMapping("/task")
 public class TaskController {
 
     private final UserService userService;
@@ -41,7 +41,7 @@ public class TaskController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteProject(@PathVariable("id") Long id) {
+    public String deleteTask(@PathVariable("id") Long id) {
         taskService.deleteById(id);
         return "redirect:/task/create";
     }
