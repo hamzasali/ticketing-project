@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProjectServiceImpl extends AbstractMapService<ProjectDTO, String> implements ProjectService {
+public class ProjectServiceImpl extends AbstractMapService<ProjectDTO,String> implements ProjectService {
 
     private final TaskService taskService;
 
@@ -22,10 +22,12 @@ public class ProjectServiceImpl extends AbstractMapService<ProjectDTO, String> i
 
     @Override
     public ProjectDTO save(ProjectDTO project) {
-        if (project.getProjectStatus() == null) {
+
+        if(project.getProjectStatus()==null)
             project.setProjectStatus(Status.OPEN);
-        }
-        return super.save(project.getProjectCode(), project);
+
+        return super.save(project.getProjectCode(),project);
+
     }
 
     @Override
@@ -39,16 +41,19 @@ public class ProjectServiceImpl extends AbstractMapService<ProjectDTO, String> i
     }
 
     @Override
-    public void deleteById(String projectCode) {
-        super.deleteById(projectCode);
+    public void update(ProjectDTO object) {
+
+        if(object.getProjectStatus()==null){
+            object.setProjectStatus(findById(object.getProjectCode()).getProjectStatus());
+        }
+
+        super.update(object.getProjectCode(),object);
+
     }
 
     @Override
-    public void update(ProjectDTO object) {
-        if (object.getProjectStatus() == null) {
-            object.setProjectStatus(findById(object.getProjectCode()).getProjectStatus());
-        }
-        super.update(object.getProjectCode(), object);
+    public void deleteById(String projectCode) {
+        super.deleteById(projectCode);
     }
 
     @Override
@@ -58,25 +63,28 @@ public class ProjectServiceImpl extends AbstractMapService<ProjectDTO, String> i
 
     @Override
     public List<ProjectDTO> getCountedListOfProjectDTO(UserDTO manager) {
+
         List<ProjectDTO> projectList =
-                findAll().stream()
-                        .filter(project -> project.getManager().equals(manager))
-                        .map(project -> {
+                findAll()
+                        .stream()
+                        .filter(project -> project.getAssignedManager().equals(manager))  //John
+                        .map(project ->{
 
-                            List<TaskDTO> taskList = taskService.findTaskByManager(manager);
+                            List<TaskDTO> taskList = taskService.findTasksByManager(manager);
 
-                            int completeTaskCount = (int) taskList.stream().filter(task -> task.getProject().equals(project)
-                                    && task.getTaskStatus() == Status.COMPLETE).count();
-                            int unfinishedTaskCount = (int) taskList.stream().filter(task -> task.getProject().equals(project)
-                                    && task.getTaskStatus() != Status.COMPLETE).count();
+                            int completeTaskCounts = (int) taskList.stream().filter(t -> t.getProject().equals(project) && t.getTaskStatus() == Status.COMPLETE).count();
+                            int unfinishedTaskCounts = (int) taskList.stream().filter(t -> t.getProject().equals(project) && t.getTaskStatus() != Status.COMPLETE).count();
 
-                            project.setCompleteTaskCounts(completeTaskCount);
-                            project.setUnfinishedTaskCounts(unfinishedTaskCount);
+                            project.setCompleteTaskCounts(completeTaskCounts);
+                            project.setUnfinishedTaskCounts(unfinishedTaskCounts);
 
                             return project;
+
                         })
                         .collect(Collectors.toList());
 
         return projectList;
+
     }
+
 }

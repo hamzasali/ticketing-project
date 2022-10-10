@@ -1,6 +1,5 @@
 package com.cydeo.controller;
 
-import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.TaskDTO;
 import com.cydeo.enums.Status;
 import com.cydeo.service.ProjectService;
@@ -28,13 +27,15 @@ public class TaskController {
     }
 
     @GetMapping("/create")
-    public String taskCreate(Model model) {
+    public String createTask(Model model) {
+
         model.addAttribute("task", new TaskDTO());
         model.addAttribute("projects", projectService.findAll());
         model.addAttribute("employees", userService.findEmployees());
         model.addAttribute("tasks", taskService.findAll());
 
         return "/task/create";
+
     }
 
     @PostMapping("/create")

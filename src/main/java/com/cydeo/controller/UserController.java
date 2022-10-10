@@ -23,13 +23,14 @@ public class UserController {
     }
 
     @GetMapping("/create")
-    public String createUser(Model model) {
+    public String createUser(Model model){
 
         model.addAttribute("user", new UserDTO());
         model.addAttribute("roles", roleService.findAll());
         model.addAttribute("users", userService.findAll());
 
         return "/user/create";
+
     }
 
     @PostMapping("/create")
@@ -43,7 +44,9 @@ public class UserController {
             return "/user/create";
 
         }
+
         userService.save(user);
+
         return "redirect:/user/create";
 
     }
@@ -70,7 +73,9 @@ public class UserController {
             return "/user/update";
 
         }
+
         userService.update(user);
+
         return "redirect:/user/create";
 
     }
@@ -80,6 +85,5 @@ public class UserController {
         userService.deleteById(username);
         return "redirect:/user/create";
     }
-
 
 }

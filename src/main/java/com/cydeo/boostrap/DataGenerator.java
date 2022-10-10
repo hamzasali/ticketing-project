@@ -1,4 +1,4 @@
-package com.cydeo.bootstrap;
+package com.cydeo.boostrap;
 
 import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.RoleDTO;
